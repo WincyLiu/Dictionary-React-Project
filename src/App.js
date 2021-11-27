@@ -7,10 +7,27 @@ function App() {
       <div className="container">
         <header className="App-header">
           <main>
-            <Dictionary />
+            <Dictionary defaultKeyword="dictionary" />
           </main>
         </header>
-        <footer className="App-footer">Coded by Wincy Liu</footer>
+        <footer className="App-footer">
+     This project was coded by {""}
+          <a
+            href="https://stupefied-snyder-c092d0.netlify.app/index.html#"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Wincy Liu
+          </a>{" "}
+          and is {""}
+          <a
+            href="https://github.com/WincyLiu/Dictionary-React-Project"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open-Source Code
+          </a>
+    </footer>
       </div>
     </div>
   );
