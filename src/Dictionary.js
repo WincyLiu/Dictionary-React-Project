@@ -4,10 +4,11 @@ import "./Dictionary.css";
 import Results from "./Results";
 import Photos from "./Photos";
 
-export default function Dictionary() {
-  let [keyword, setKeyword] = useState("");
+export default function Dictionary(props) {
+  let [keyword, setKeyword] = useState(props.defaultKeyword);
   let [results, setResults] = useState(null);
   let [photos, setPhotos] = useState(null);
+  let [loaded, setLoaded] = useState(false);
 
   function handleDictionaryResponse(response) {
     setResults(response.data[0]);
@@ -17,9 +18,8 @@ export default function Dictionary() {
     setPhotos(response.data.photos);
   }
 
-  function search(event) {
-    event.preventDefault();
-    // documentation: https://dictionaryapi.dev/
+  function search() {
+     // documentation: https://dictionaryapi.dev/
     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`;
     axios.get(apiUrl).then(handleDictionaryResponse);
 
@@ -29,22 +29,35 @@ export default function Dictionary() {
     let headers = { Authorization: `Bearer ${pexelsApiKey}` };
     axios.get(pexelsApiUrl, { headers: headers }).then(handlePexelsResponse);
   }
+  
+   function handleSubmit(event) {
+    event.preventDefault();
+    search();
+  }
 
   function handleKeywordChange(event) {
     setKeyword(event.target.value);
   }
+  
+  function load() {
+    setLoaded(true);
+    search();
+  }
 
+  
+  if (loaded) {
   return (
     <div className="Dictionary">
       <h1 className="text-center mt-3 mb-3"> Dictionary</h1>
       <section>
-        <form onSubmit={search}>
+        <form onSubmit={handleSubmit}>
           <input
             className="form-control"
             type="search"
             autoFocus={true}
             onChange={handleKeywordChange}
             placeholder="Search for a word"
+           defaultValue={props.defaultKeyword}
           />
         </form>
       </section>
@@ -52,4 +65,8 @@ export default function Dictionary() {
       <Photos photos={photos} />
     </div>
   );
+} else {
+    load();
+    return "Loading";
+  }
 }
